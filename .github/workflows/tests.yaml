@@ -19,7 +19,5 @@ jobs:
     - uses: codecov/codecov-action@v2
       with:
         file: ./coverage/.resultset.json
-    - uses: actions/upload-artifact@v2
-      with:
-        name: code-coverage-report
-        path: ./coverage
+    - name: Report coverage
+      run: bash <(curl -s https://codecov.io/bash)
