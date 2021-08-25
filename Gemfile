@@ -20,6 +20,7 @@ ruby "~> 3.0"
 
 gemspec
 
+gem "codecov", "~> 0.4"
 gem "minitest", "~> 5.0"
 gem "rake", "~> 13.0"
 gem "rubocop", "~> 1.7"
