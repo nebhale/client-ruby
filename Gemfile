@@ -20,10 +20,13 @@ ruby "~> 3.0"
 
 gemspec
 
-gem "codecov", "~> 0.4"
-gem "minitest", "~> 5.0"
-gem "rake", "~> 13.0"
-gem "rubocop", "~> 1.7"
-gem "rubocop-minitest", "~> 0.15"
-gem "rubocop-rake", "~> 0.6"
-gem "simplecov", "~> 0.21"
+group :development, :optional => true do
+  gem "codecov", "~> 0.4"
+  gem "minitest", "~> 5.0"
+  gem "rake", "~> 13.0"
+  gem "rubocop", "~> 1.7"
+  gem "rubocop-minitest", "~> 0.15"
+  gem "rubocop-rake", "~> 0.6"
+  gem "simplecov", "~> 0.21"
+end
+
