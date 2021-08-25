@@ -19,6 +19,7 @@ Gem::Specification.new do |spec|
   spec.version = "1.0.0"
   spec.authors = ["Ben Hale"]
   spec.email = ["nebhale@nebhale.com"]
+  spec.license = "Apache-2.0"
 
   spec.summary = "A library to access " \
                  "[Service Binding Specification for Kubernetes](https://k8s-service-bindings.github.io/spec/) " \
@@ -26,8 +27,6 @@ Gem::Specification.new do |spec|
                  "[Workload Projections](https://k8s-service-bindings.github.io/spec/#workload-projection)"
   spec.homepage = "https://github.com/nebhale/client-ruby"
   spec.required_ruby_version = ">= 3.0.0"
-
-  spec.metadata["allowed_push_host"] = "TODO: Set to 'https://mygemserver.com'"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/nebhale/client-ruby.git"
