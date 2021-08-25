@@ -19,5 +19,3 @@ jobs:
     - name: Run Tests
       run: bundle exec rake
     - uses: codecov/codecov-action@v2
-      with:
-        file: coverage/codecov-result.json
