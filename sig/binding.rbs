@@ -1,0 +1,47 @@
+module Bindings
+  PROVIDER: String
+
+  TYPE: String
+
+  module Binding
+    def get_as_bytes: (String key) -> Array[Integer]?
+
+    def get_name: () -> String
+
+    def get: (String key) -> String?
+
+    def get_provider: () -> String?
+
+    def get_type: () -> String
+  end
+
+  class CacheBinding
+    include Binding
+
+    def initialize: (Binding delegate) -> void
+
+    def get_as_bytes: (String key) -> Array[Integer]?
+
+    def get_name: () -> String
+  end
+
+  class ConfigTreeBinding
+    include Binding
+
+    def initialize: (String root) -> void
+
+    def get_as_bytes: (String key) -> Array[Integer]?
+
+    def get_name: () -> String
+  end
+
+  class HashBinding
+    include Binding
+
+    def initialize: (String name, Hash content) -> void
+
+    def get_as_bytes: (String key) -> Array[Integer]?
+
+    def get_name: () -> String
+  end
+end

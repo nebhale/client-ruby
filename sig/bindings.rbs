@@ -1,0 +1,13 @@
+module Bindings
+  SERVICE_BINDING_ROOT: String
+
+  def cached: (Array[Binding] bindings) -> Array[Binding]
+
+  def from_path: (String root) -> Array[Binding]
+
+  def from_service_binding_root: () -> Array[Binding]
+
+  def find: (Array[Binding] bindings, String name) -> Binding?
+
+  def filter: (Array[Binding] bindings, String? `type`, String? provider) -> Array[Binding]
+end
