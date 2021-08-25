@@ -14,19 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
 
-ruby "~> 3.0"
+require "bindings"
+require "pg"
 
-gemspec
+b = Bindings.from_service_binding_root
+b = Bindings.filter(b, "postgresql")
+raise "Incorrect number of PostgreSQL bindings: #{b.length}" if b.length != 1
 
-group :development, optional: true do
-  gem "codecov", "~> 0.4"
-  gem "minitest", "~> 5.0"
-  gem "pg", "~> 1.0"
-  gem "rake", "~> 13.0"
-  gem "rubocop", "~> 1.7"
-  gem "rubocop-minitest", "~> 0.15"
-  gem "rubocop-rake", "~> 0.6"
-  gem "simplecov", "~> 0.21"
-end
+u = b[0].get("url")
+raise "No URL in binding" if url.nil?
+
+conn = PG.connect(u) # rubocop:disable Lint/UselessAssignment
+
+# ...
