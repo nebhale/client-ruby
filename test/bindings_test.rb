@@ -172,7 +172,7 @@ describe "Bindings" do
                                   })
       ]
 
-      v = Bindings.filter(b, "test-type-1", "test-provider-1")
+      v = Bindings.filter(b, nil, "test-provider-1")
       assert_equal 1, v.length
     end
   end
