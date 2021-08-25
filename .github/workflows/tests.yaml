@@ -17,9 +17,4 @@ jobs:
     - name: Run Tests
       run: bundle exec rake
     - uses: codecov/codecov-action@v2
-      with:
-        file: ./coverage/.resultset.json
-    - uses: actions/upload-artifact@v2
-      with:
-        name: code-coverage-report
-        path: ./coverage
+

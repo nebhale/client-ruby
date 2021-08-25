@@ -17,6 +17,9 @@
 $LOAD_PATH.unshift File.expand_path("../lib", __dir__)
 
 require "simplecov"
+require "simplecov_json_formatter"
+
+SimpleCov.formatter = SimpleCov::Formatter::JSONFormatter
 SimpleCov.start do
   add_filter "test"
 end
