@@ -21,7 +21,6 @@ ruby "~> 3.0"
 gemspec
 
 group :development, optional: true do
-  gem "codecov", "~> 0.4"
   gem "minitest", "~> 5.0"
   gem "pg", "~> 1.0"
   gem "rake", "~> 13.0"
@@ -29,4 +28,5 @@ group :development, optional: true do
   gem "rubocop-minitest", "~> 0.15"
   gem "rubocop-rake", "~> 0.6"
   gem "simplecov", "~> 0.21"
+  gem "simplecov-cobertura", "~> 1.4"
 end

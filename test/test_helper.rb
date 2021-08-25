@@ -21,7 +21,7 @@ SimpleCov.start do
   add_filter "test"
 end
 
-require "codecov/formatter"
-SimpleCov.formatter = Codecov::SimpleCov::Formatter
+require "simplecov-cobertura"
+SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
 
 require "minitest/autorun"
