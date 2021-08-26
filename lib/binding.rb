@@ -88,6 +88,7 @@ module Bindings
     def initialize(delegate)
       @delegate = delegate
       @cache = {}
+      @mutex = Mutex.new
     end
 
     # Returns the contents of a binding entry in its raw bytes form.
@@ -96,12 +97,14 @@ module Bindings
     # @return [String] the contents of a binding entry if it exists
     # @return [nil]
     def get_as_bytes(key)
-      return @cache[key] if @cache.key?(key)
+      @mutex.synchronize do
+        return @cache[key] if @cache.key?(key)
 
-      v = @delegate.get_as_bytes(key)
-      @cache[key] = v unless v.nil?
+        v = @delegate.get_as_bytes(key)
+        @cache[key] = v unless v.nil?
 
-      v
+        v
+      end
     end
 
     # Returns the name of the binding
