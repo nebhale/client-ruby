@@ -17,88 +17,74 @@
 require "test_helper"
 require "binding"
 
-describe "Binding" do
-  it "should return string value" do
+describe "get" do
+  it "missing" do
+    b = Bindings::HashBinding.new("test-name", {})
+    assert_nil b.get("test-secret-key")
+  end
+
+  it "valid" do
     b = Bindings::HashBinding.new("test-name",
                                   {
                                     "test-secret-key" => "test-secret-value\n".unpack("U*")
                                   })
 
-    v = b.get("test-secret-key")
-    assert_equal "test-secret-value", v
+    assert_equal "test-secret-value", b.get("test-secret-key")
+  end
+end
+
+describe "provider" do
+  it "missing" do
+    b = Bindings::HashBinding.new("test-name", {})
+    assert_nil b.provider
   end
 
-  describe "provider" do
-    it "should return nil if provider is not specified" do
-      b = Bindings::HashBinding.new("test-name", {})
+  it "valid" do
+    b = Bindings::HashBinding.new("test-name",
+                                  {
+                                    "provider" => "test-provider-1".unpack("U*")
+                                  })
 
-      v = b.provider
-      assert_nil v
-    end
+    assert_equal "test-provider-1", b.provider
+  end
+end
 
-    it "should return provider" do
-      b = Bindings::HashBinding.new("test-name",
-                                    {
-                                      "provider" => "test-provider-1".unpack("U*")
-                                    })
-
-      v = b.provider
-      assert_equal "test-provider-1", v
-    end
+describe "type" do
+  it "invalid" do
+    b = Bindings::HashBinding.new("test-name", {})
+    assert_raises { b.type }
   end
 
-  describe "type" do
-    it "should raise error if type is not specified" do
-      b = Bindings::HashBinding.new("test-name", {})
+  it "valid" do
+    b = Bindings::HashBinding.new("test-name",
+                                  {
+                                    "type" => "test-type-1".unpack("U*")
+                                  })
 
-      assert_raises { b.type }
-    end
-
-    it "should return provider" do
-      b = Bindings::HashBinding.new("test-name",
-                                    {
-                                      "type" => "test-type-1".unpack("U*")
-                                    })
-
-      v = b.type
-      assert_equal "test-type-1", v
-    end
+    assert_equal "test-type-1", b.type
   end
 end
 
 describe "CacheBinding" do
-  describe "getAsBytes" do
-    it "should retrieve uncached value" do
-      s = StubBinding.new
-      b = Bindings::CacheBinding.new(s)
+  it "missing" do
+    s = StubBinding.new
+    b = Bindings::CacheBinding.new(s)
 
-      v = b.get_as_bytes "test-key"
-      refute_nil v
-      assert_equal s.get_as_bytes_count, 1
-    end
-
-    it "should not cache unknown keys" do
-      s = StubBinding.new
-      b = Bindings::CacheBinding.new(s)
-
-      v = b.get_as_bytes "test-unknown-key"
-      assert_nil v
-      v = b.get_as_bytes "test-unknown-key"
-      assert_nil v
-      assert_equal s.get_as_bytes_count, 2
-    end
-
-    it "should return cached value" do
-      s = StubBinding.new
-      b = Bindings::CacheBinding.new(s)
-
-      refute_nil b.get_as_bytes "test-key"
-      refute_nil b.get_as_bytes "test-key"
-      assert_equal s.get_as_bytes_count, 1
-    end
+    assert_nil b.get_as_bytes("test-unknown-key")
+    assert_nil b.get_as_bytes("test-unknown-key")
+    assert_equal s.get_as_bytes_count, 2
   end
 
-  it "should always retrieve name" do
+  it "valid" do
+    s = StubBinding.new
+    b = Bindings::CacheBinding.new(s)
+
+    refute_nil b.get_as_bytes "test-key"
+    refute_nil b.get_as_bytes "test-key"
+    assert_equal s.get_as_bytes_count, 1
+  end
+
+  it "name" do
     s = StubBinding.new
     b = Bindings::CacheBinding.new(s)
 
@@ -109,81 +95,55 @@ describe "CacheBinding" do
 end
 
 describe "ConfigTreeBinding" do
-  describe "getAsBytes" do
-    it "should return nil for a missing key" do
-      b = Bindings::ConfigTreeBinding.new("test/testdata/test-k8s")
-
-      v = b.get_as_bytes("test-missing-key")
-      assert_nil v
-    end
-
-    it "should return nil for a directory" do
-      b = Bindings::ConfigTreeBinding.new("test/testdata/test-k8s")
-
-      v = b.get_as_bytes(".hidden-data")
-      assert_nil v
-    end
-
-    it "should return nil for an invalid key" do
-      b = Bindings::ConfigTreeBinding.new("test/testdata/test-k8s")
-
-      v = b.get_as_bytes("test^missing^key")
-      assert_nil v
-    end
-
-    it "should return bytes" do
-      b = Bindings::ConfigTreeBinding.new("test/testdata/test-k8s")
-
-      v = b.get_as_bytes("test-secret-key")
-      assert_equal "test-secret-value\n".unpack("U*"), v
-    end
+  it "missing" do
+    b = Bindings::ConfigTreeBinding.new("test/testdata/test-k8s")
+    assert_nil b.get_as_bytes("test-missing-key")
   end
 
-  it "should return the name" do
+  it "directory" do
     b = Bindings::ConfigTreeBinding.new("test/testdata/test-k8s")
+    assert_nil b.get_as_bytes(".hidden-data")
+  end
 
+  it "invalid" do
+    b = Bindings::ConfigTreeBinding.new("test/testdata/test-k8s")
+    assert_nil b.get_as_bytes("test^invalid^key")
+  end
+
+  it "valid" do
+    b = Bindings::ConfigTreeBinding.new("test/testdata/test-k8s")
+    assert_equal "test-secret-value\n".unpack("U*"), b.get_as_bytes("test-secret-key")
+  end
+
+  it "name" do
+    b = Bindings::ConfigTreeBinding.new("test/testdata/test-k8s")
     assert_equal "test-k8s", b.name
   end
 end
 
 describe "HashBinding" do
-  describe "getAsBytes" do
-    it "should return nil for missing key" do
-      b = Bindings::HashBinding.new("test-name",
-                                    {
-                                      "test-secret-key" => "test-secret-value\n".unpack("U*")
-                                    })
-
-      v = b.get_as_bytes("test-missing-key")
-      assert_nil v
-    end
-
-    it "should return nil for an invalid key" do
-      b = Bindings::HashBinding.new("test-name",
-                                    {
-                                      "test-secret-key" => "test-secret-value\n".unpack("U*")
-                                    })
-
-      v = b.get_as_bytes("test^invalid^key")
-      assert_nil v
-    end
-
-    it "should return bytes" do
-      b = Bindings::HashBinding.new("test-name",
-                                    {
-                                      "test-secret-key" => "test-secret-value\n".unpack("U*")
-                                    })
-
-      v = b.get_as_bytes("test-secret-key")
-      assert_equal "test-secret-value\n".unpack("U*"), v
-    end
+  it "missing" do
+    b = Bindings::HashBinding.new("test-name", {})
+    assert_nil b.get_as_bytes("test-missing-key")
   end
 
-  it "should return the name" do
+  it "invalid" do
     b = Bindings::HashBinding.new("test-name", {})
+    assert_nil b.get_as_bytes("test^invalid^key")
+  end
 
-    v = b.name
-    assert_equal "test-name", v
+  it "valid" do
+    b = Bindings::HashBinding.new("test-name",
+                                  {
+                                    "test-secret-key" => "test-secret-value\n".unpack("U*")
+                                  })
+
+    assert_equal "test-secret-value\n".unpack("U*"), b.get_as_bytes("test-secret-key")
+  end
+
+  it "name" do
+    b = Bindings::HashBinding.new("test-name", {})
+    assert_equal "test-name", b.name
   end
 end
 

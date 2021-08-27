@@ -18,162 +18,173 @@ require "test_helper"
 require "binding"
 require "bindings"
 
-describe "Bindings" do
-  describe "cached" do
-    it "should wrap with CacheBinding" do
-      b = Bindings.cached([
-                            Bindings::HashBinding.new("test-name-1", {}),
-                            Bindings::HashBinding.new("test-name-2", {})
-                          ])
+describe "cached" do
+  it "cached" do
+    b = Bindings.cached([
+                          Bindings::HashBinding.new("test-name-1", {}),
+                          Bindings::HashBinding.new("test-name-2", {})
+                        ])
 
-      b.each { |c| assert c.is_a?(Bindings::CacheBinding) }
-    end
+    b.each { |c| assert c.is_a?(Bindings::CacheBinding) }
+  end
+end
+
+describe "from" do
+  it "missing" do
+    assert_predicate Bindings.from_path("missing"), :empty?
   end
 
-  describe "from" do
-    it "should create empty Bindings if directory does not exist" do
-      v = Bindings.from_path("missing")
-      assert_predicate v, :empty?
-    end
-
-    it "should create empty bindings if not a directory" do
-      v = Bindings.from_path("test/testdata/additional-file")
-      assert_predicate v, :empty?
-    end
-
-    it "should create Bindings" do
-      v = Bindings.from_path("test/testdata")
-      assert_equal 3, v.length
-    end
+  it "file" do
+    assert_predicate Bindings.from_path("test/testdata/additional-file"), :empty?
   end
 
-  describe "from_service_binding_root" do
-    it "should create empty Bindings if $SERVICE_BINDING_ROOT is not set" do
-      v = Bindings.from_service_binding_root
-      assert_predicate v, :empty?
-    end
+  it "valid" do
+    assert_equal 3, Bindings.from_path("test/testdata").length
+  end
+end
 
-    it "should create Bindings" do
-      old = ENV["SERVICE_BINDING_ROOT"]
-      ENV["SERVICE_BINDING_ROOT"] = "test/testdata"
+describe "from_service_binding_root" do
+  it "unset" do
+    assert_predicate Bindings.from_service_binding_root, :empty?
+  end
 
-      begin
-        v = Bindings.from_service_binding_root
-        assert_equal 3, v.length
-      ensure
-        if old.nil?
-          ENV.delete("SERVICE_BINDING_ROOT")
-        else
-          ENV["SERVICE_BINDING_ROOT"] = old
-        end
+  it "set" do
+    old = ENV["SERVICE_BINDING_ROOT"]
+    ENV["SERVICE_BINDING_ROOT"] = "test/testdata"
+
+    begin
+      assert_equal 3, Bindings.from_service_binding_root.length
+    ensure
+      if old.nil?
+        ENV.delete("SERVICE_BINDING_ROOT")
+      else
+        ENV["SERVICE_BINDING_ROOT"] = old
       end
     end
   end
+end
 
-  describe "find" do
-    it "should return nil if no Binding with name exists" do
-      b = [
-        Bindings::HashBinding.new("test-name-1", {})
-      ]
+describe "find" do
+  it "missing" do
+    b = [
+      Bindings::HashBinding.new("test-name-1", {})
+    ]
 
-      assert_nil Bindings.find(b, "test-name-2")
-    end
-
-    it "should return Binding" do
-      b = [
-        Bindings::HashBinding.new("test-name-1", {})
-      ]
-
-      refute_nil Bindings.find(b, "test-name-1")
-    end
+    assert_nil Bindings.find(b, "test-name-2")
   end
 
-  describe "filter" do
-    it "should return no Bindings" do
-      b = [
-        Bindings::HashBinding.new("test-name-1",
-                                  {
-                                    "type" => "test-type-1".unpack("U*"),
-                                    "provider" => "test-provider-1".unpack("U*")
-                                  }),
-        Bindings::HashBinding.new("test-name-2",
-                                  {
-                                    "type" => "test-type-2".unpack("U*")
-                                  })
-      ]
+  it "valid" do
+    b = [
+      Bindings::HashBinding.new("test-name-1", {}),
+      Bindings::HashBinding.new("test-name-2", {})
+    ]
 
-      v = Bindings.filter(b, "test-type-3")
-      assert_predicate v, :empty?
-    end
+    assert_equal "test-name-1", Bindings.find(b, "test-name-1").name
+  end
+end
 
-    it "should return a single Binding" do
-      b = [
-        Bindings::HashBinding.new("test-name-1",
-                                  {
-                                    "type" => "test-type-1".unpack("U*"),
-                                    "provider" => "test-provider-1".unpack("U*")
-                                  }),
-        Bindings::HashBinding.new("test-name-2",
-                                  {
-                                    "type" => "test-type-2".unpack("U*")
-                                  })
-      ]
+describe "filter" do
+  it "none" do
+    b = [
+      Bindings::HashBinding.new("test-name-1",
+                                {
+                                  "type" => "test-type-1".unpack("U*"),
+                                  "provider" => "test-provider-1".unpack("U*")
+                                }),
+      Bindings::HashBinding.new("test-name-2",
+                                {
+                                  "type" => "test-type-1".unpack("U*"),
+                                  "provider" => "test-provider-2".unpack("U*")
+                                }),
+      Bindings::HashBinding.new("test-name-3",
+                                {
+                                  "type" => "test-type-2".unpack("U*"),
+                                  "provider" => "test-provider-2".unpack("U*")
+                                }),
+      Bindings::HashBinding.new("test-name-4",
+                                {
+                                  "type" => "test-type-2".unpack("U*")
+                                })
+    ]
 
-      v = Bindings.filter(b, "test-type-1")
-      assert_equal 1, v.length
-    end
+    assert_equal 4, Bindings.filter(b).length
+  end
 
-    it "should return multiple Bindings" do
-      b = [
-        Bindings::HashBinding.new("test-name-1",
-                                  {
-                                    "type" => "test-type-1".unpack("U*"),
-                                    "provider" => "test-provider-1".unpack("U*")
-                                  }),
-        Bindings::HashBinding.new("test-name-2",
-                                  {
-                                    "type" => "test-type-1".unpack("U*")
-                                  })
-      ]
+  it "type" do
+    b = [
+      Bindings::HashBinding.new("test-name-1",
+                                {
+                                  "type" => "test-type-1".unpack("U*"),
+                                  "provider" => "test-provider-1".unpack("U*")
+                                }),
+      Bindings::HashBinding.new("test-name-2",
+                                {
+                                  "type" => "test-type-1".unpack("U*"),
+                                  "provider" => "test-provider-2".unpack("U*")
+                                }),
+      Bindings::HashBinding.new("test-name-3",
+                                {
+                                  "type" => "test-type-2".unpack("U*"),
+                                  "provider" => "test-provider-2".unpack("U*")
+                                }),
+      Bindings::HashBinding.new("test-name-4",
+                                {
+                                  "type" => "test-type-2".unpack("U*")
+                                })
+    ]
 
-      v = Bindings.filter(b, "test-type-1")
-      assert_equal 2, v.length
-    end
+    assert_equal 2, Bindings.filter(b, "test-type-1").length
+  end
 
-    it "should filter by type and provider" do
-      b = [
-        Bindings::HashBinding.new("test-name-1",
-                                  {
-                                    "type" => "test-type-1".unpack("U*"),
-                                    "provider" => "test-provider-1".unpack("U*")
-                                  }),
-        Bindings::HashBinding.new("test-name-2",
-                                  {
-                                    "type" => "test-type-2".unpack("U*"),
-                                    "provider" => "test-provider-2".unpack("U*")
-                                  })
-      ]
+  it "provider" do
+    b = [
+      Bindings::HashBinding.new("test-name-1",
+                                {
+                                  "type" => "test-type-1".unpack("U*"),
+                                  "provider" => "test-provider-1".unpack("U*")
+                                }),
+      Bindings::HashBinding.new("test-name-2",
+                                {
+                                  "type" => "test-type-1".unpack("U*"),
+                                  "provider" => "test-provider-2".unpack("U*")
+                                }),
+      Bindings::HashBinding.new("test-name-3",
+                                {
+                                  "type" => "test-type-2".unpack("U*"),
+                                  "provider" => "test-provider-2".unpack("U*")
+                                }),
+      Bindings::HashBinding.new("test-name-4",
+                                {
+                                  "type" => "test-type-2".unpack("U*")
+                                })
+    ]
 
-      v = Bindings.filter(b, "test-type-1", "test-provider-1")
-      assert_equal 1, v.length
-    end
+    assert_equal 2, Bindings.filter(b, nil, "test-provider-2").length
+  end
 
-    it "should filter by provider" do
-      b = [
-        Bindings::HashBinding.new("test-name-1",
-                                  {
-                                    "type" => "test-type-1".unpack("U*"),
-                                    "provider" => "test-provider-1".unpack("U*")
-                                  }),
-        Bindings::HashBinding.new("test-name-2",
-                                  {
-                                    "type" => "test-type-2".unpack("U*"),
-                                    "provider" => "test-provider-2".unpack("U*")
-                                  })
-      ]
+  it "type and provider" do
+    b = [
+      Bindings::HashBinding.new("test-name-1",
+                                {
+                                  "type" => "test-type-1".unpack("U*"),
+                                  "provider" => "test-provider-1".unpack("U*")
+                                }),
+      Bindings::HashBinding.new("test-name-2",
+                                {
+                                  "type" => "test-type-1".unpack("U*"),
+                                  "provider" => "test-provider-2".unpack("U*")
+                                }),
+      Bindings::HashBinding.new("test-name-3",
+                                {
+                                  "type" => "test-type-2".unpack("U*"),
+                                  "provider" => "test-provider-2".unpack("U*")
+                                }),
+      Bindings::HashBinding.new("test-name-4",
+                                {
+                                  "type" => "test-type-2".unpack("U*")
+                                })
+    ]
 
-      v = Bindings.filter(b, nil, "test-provider-1")
-      assert_equal 1, v.length
-    end
+    assert_equal 1, Bindings.filter(b, "test-type-1", "test-provider-1").length
   end
 end

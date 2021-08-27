@@ -18,12 +18,12 @@ require "test_helper"
 require "secret"
 
 describe "valid_secret_key?" do
-  it "should identify valid keys" do
+  it "valid" do
     valid = %w[alpha BRAVO Charlie delta01 echo-foxtrot golf_hotel india.juliet .kilo]
     valid.each { |v| assert Bindings.valid_secret_key?(v) }
   end
 
-  it "should identify invalid keys" do
+  it "invalid" do
     invalid = %w[lima^mike]
     invalid.each { |i| refute Bindings.valid_secret_key?(i) }
   end
