@@ -16,13 +16,13 @@
 
 source "https://rubygems.org"
 
-ruby "~> 3.0"
+ruby "~> 3.2"
 
 gemspec
 
 group :development, optional: true do
   gem "minitest", "~> 5.0"
-  gem "pg", "~> 1.0"
+  gem "pg", "~> 1.5"
   gem "rake", "~> 13.0"
   gem "rubocop", "~> 1.7"
   gem "rubocop-minitest", "~> 0.15"
