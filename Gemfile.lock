@@ -12,7 +12,7 @@ GEM
     parallel (1.20.1)
     parser (3.0.2.0)
       ast (~> 2.4.1)
-    pg (1.2.3)
+    pg (1.5.4)
     rainbow (3.0.0)
     rake (13.0.6)
     regexp_parser (2.1.1)
@@ -49,7 +49,7 @@ PLATFORMS
 
 DEPENDENCIES
   minitest (~> 5.0)
-  pg (~> 1.0)
+  pg (~> 1.5)
   rake (~> 13.0)
   rubocop (~> 1.7)
   rubocop-minitest (~> 0.15)
