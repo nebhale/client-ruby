@@ -1,8 +1,22 @@
 version: 2
 updates:
+
 - package-ecosystem: github-actions
-  directory: "/"
+  directory: /
   schedule:
     interval: daily
+  labels:
+  - dependencies
+  - github-actions
+  reviewers:
+  - nebhale
+
+- package-ecosystem: bundler
+  directory: /
+  schedule:
+    interval: daily
+  labels:
+  - dependencies
+  - bundler
   reviewers:
   - nebhale
