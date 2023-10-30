@@ -23,7 +23,7 @@ gemspec
 group :development, optional: true do
   gem "minitest", "~> 5.20"
   gem "pg", "~> 1.5"
-  gem "rake", "~> 13.0"
+  gem "rake", "~> 13.1"
   gem "rubocop", "~> 1.57"
   gem "rubocop-minitest", "~> 0.33"
   gem "rubocop-rake", "~> 0.6"
