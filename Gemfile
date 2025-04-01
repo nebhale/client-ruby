@@ -25,7 +25,7 @@ group :development, optional: true do
   gem "pg", "~> 1.5"
   gem "rake", "~> 13.2"
   gem "rubocop", "~> 1.75"
-  gem "rubocop-minitest", "~> 0.37"
+  gem "rubocop-minitest", "~> 0.38"
   gem "rubocop-rake", "~> 0.7"
   gem "simplecov", "~> 0.22"
   gem "simplecov-cobertura", "~> 2.1"
