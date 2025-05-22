@@ -8,8 +8,6 @@ updates:
   labels:
   - dependencies
   - github-actions
-  reviewers:
-  - nebhale
 
 - package-ecosystem: bundler
   directory: /
@@ -18,5 +16,3 @@ updates:
   labels:
   - dependencies
   - bundler
-  reviewers:
-  - nebhale
