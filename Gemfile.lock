@@ -16,7 +16,8 @@ GEM
     parser (3.3.8.0)
       ast (~> 2.4.1)
       racc
-    pg (1.5.9)
+    pg (1.6.0-arm64-darwin)
+    pg (1.6.0-x86_64-linux)
     prism (1.4.0)
     racc (1.8.1)
     rainbow (3.1.1)
@@ -66,7 +67,7 @@ PLATFORMS
 
 DEPENDENCIES
   minitest (~> 5.25)
-  pg (~> 1.5)
+  pg (~> 1.6)
   rake (~> 13.3)
   rubocop (~> 1.79)
   rubocop-minitest (~> 0.38)
