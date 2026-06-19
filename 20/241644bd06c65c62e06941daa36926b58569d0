@@ -1,0 +1,16 @@
+service-bindings.gemspec
+  h_1492100876b0a0 29
+.rubocop.yml
+  h_1492100876b0a0 7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.8",
+  "base_commit_sha": "20241644bd06c65c62e06941daa36926b58569d0",
+  "prompts": {},
+  "humans": {
+    "h_1492100876b0a0": {
+      "author": "Ben Hale <nebhale@nebhale.com>"
+    }
+  }
+}
