@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
                  "conformant Service Binding " \
                  "[Workload Projections](https://k8s-service-bindings.github.io/spec/#workload-projection)"
   spec.homepage = "https://github.com/nebhale/client-ruby"
-  spec.required_ruby_version = ">= 3.0.0"
+  spec.required_ruby_version = ">= 3.2.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/nebhale/client-ruby.git"

@@ -4,7 +4,7 @@ require:
 
 AllCops:
   NewCops: disable
-  TargetRubyVersion: 3.0
+  TargetRubyVersion: 3.2
 
 Style/StringLiterals:
   Enabled: true
