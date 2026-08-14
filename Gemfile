@@ -27,6 +27,6 @@ group :development, optional: true do
   gem "rubocop", "~> 1.89"
   gem "rubocop-minitest", "~> 0.40"
   gem "rubocop-rake", "~> 0.7"
-  gem "simplecov", "~> 1.0"
+  gem "simplecov", "~> 1.1"
   gem "simplecov-cobertura", "~> 4.0"
 end
