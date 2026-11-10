@@ -21,7 +21,7 @@ ruby "~> 3.2"
 gemspec
 
 group :development, optional: true do
-  gem "minitest", "~> 6.0"
+  gem "minitest", "~> 6.1"
   gem "pg", "~> 1.7"
   gem "rake", "~> 13.4"
   gem "rubocop", "~> 1.92"
