@@ -1,0 +1,21 @@
+.ruby-version
+  s_a1f4b404da469a::t_6c6068a868d5b4 1
+Gemfile.lock
+  s_a1f4b404da469a::t_5e2f5b7b0cc9a0 75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a01089e39dfdde8a4c78f6dd807844a7d4375600",
+  "prompts": {},
+  "sessions": {
+    "s_a1f4b404da469a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1cb9b-f486-7780-abbf-e8d082088134",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Ben Hale <nebhale@nebhale.com>"
+    }
+  }
+}
