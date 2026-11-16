@@ -1,10 +1,10 @@
-require:
+plugins:
 - rubocop-minitest
 - rubocop-rake
 
 AllCops:
   NewCops: disable
-  TargetRubyVersion: 3.2
+  TargetRubyVersion: 3.3
 
 Style/StringLiterals:
   Enabled: true
