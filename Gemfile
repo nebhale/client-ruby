@@ -16,7 +16,7 @@
 
 source "https://rubygems.org"
 
-ruby "~> 3.2"
+ruby ">= 3.3"
 
 gemspec
 
@@ -27,6 +27,6 @@ group :development, optional: true do
   gem "rubocop", "~> 1.92"
   gem "rubocop-minitest", "~> 0.41"
   gem "rubocop-rake", "~> 0.7"
-  gem "simplecov", "~> 1.2"
+  gem "simplecov", "~> 1.3"
   gem "simplecov-cobertura", "~> 4.0"
 end
